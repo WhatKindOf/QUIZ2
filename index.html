@@ -1,0 +1,3658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+<!-- 
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script> 
+-->
+
+    <style>
+        * { margin: 0; padding: 0; font-family: 'NeoDunggeunmo'; }
+        *, *::before, *::after { box-sizing: border-box; }
+        body { background: radial-gradient(#a4a4a4 3px, transparent 4px), radial-gradient(#a4a4a4 3px, transparent 4px), linear-gradient(#fff 4px, transparent 0), linear-gradient(45deg, transparent 74px, transparent 75px, #a4a4a4 75px, #a4a4a4 76px, transparent 77px, transparent 109px), linear-gradient(-45deg, transparent 75px, transparent 76px, #a4a4a4 76px, #a4a4a4 77px, transparent 78px, transparent 109px), #fff; background-size: 109px 109px, 109px 109px, 100% 6px, 109px 109px, 109px 109px; background-position: 54px 55px, 0px 0px, 0px 0px, 0px 0px, 0px 0px; }
+        
+        #header { position: fixed; left: 0; top: 0; background-color: #262626; color: #fff; padding: 10px; width: 100%; z-index: 1000; display: flex; justify-content: space-between; }
+        #header h1 { color: #fff; font-size: 28px; padding: 5px 5px 5px 10px; z-index: 10; position: relative; }    
+        #header::before { content: ''; border: 4px ridge #c0d6df; position: absolute; left: 5px; top: 5px; width: calc(100% - 10px); height: calc(100% - 10px); }
+
+        #main { padding: 80px 0; }
+        
+        .quiz__wrap { display: flex; justify-content: center; flex-wrap: wrap; align-items: flex-start; margin-bottom: 100px; }
+        .quiz__wrap .quiz { width: 500px; background-color: #fff; border: 8px ridge #c0d6df; margin: 10px; }
+        .quiz__title { background-color: #c0d6df; border: 3px ridge #c0d6df; border-bottom-width: 6px; padding: 5px; font-size: 16px; color: #3b3b3b; text-align: center; }
+        .quiz__title span { font-size: 20px; font-weight: 700; }
+        .quiz__question { padding: 22px; font-size: 20px; font-weight: 300; line-height: 1.4; border-bottom: 6px ridge #c0d6df; }
+        .quiz__view { border-bottom: 6px ridge #c0d6df; overflow: hidden; }
+        .card-container { position: relative; width: 360px; padding: 20px; margin: auto; border-radius: 3%; z-index: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        .card-container .answer { color: blue; font-size: 1em; font-weight: 700; }
+        .quiz__answer { padding: 20px; text-align: center; font-size: 20px; }
+        .quiz__answer .confirm { background-color: #d6e4e9; border: 6px ridge #c0d6df; width: 100%; padding: 10px 20px; font-size: 20px; cursor: pointer; transition: all 0.3s; font-weight: bold; }
+    
+        .answer { display: none; }
+    
+    </style>
+
+    <script>
+        function ClickConfirm(btn){
+            
+            var len = btn.parentNode.parentNode.children[1].children[0].children.length;
+            var dis = btn.parentNode.parentNode.children[1].children[0].children[0].style.display;
+
+            if(dis == "block"){
+                for(var i = 0; i < len; i++){
+                    btn.parentNode.parentNode.children[1].children[0].children[i].style.display = "none";
+                }
+            }
+            else{
+                for(var i = 0; i < len; i++){
+                    btn.parentNode.parentNode.children[1].children[0].children[i].style.display = "block";
+                }
+            }
+
+            // var dis = $(btn).parent("div").parent("div").children(".quiz__view").children(".card-container").children(".answer").css("display");
+
+            // if(dis == "none"){
+            //     $(btn).parent("div").parent("div").children(".quiz__view").children(".card-container").children(".answer").css("display", "block");
+            // }
+            // else{
+            //     $(btn).parent("div").parent("div").children(".quiz__view").children(".card-container").children(".answer").css("display", "none");
+            // }
+        }
+    </script>
+
+</head>
+<body>
+    <header id="header">
+        <h1>Quiz</h1>
+    </header>
+    <!-- //header -->
+
+    <main id="main">
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>1번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>은행의 특성에 대한 설명이다.</span><br>
+                        <span>특성 1 : (   )이 매우 (   )</span><br>
+                        <span>특성 2 : (   )의 대부분이 (   )임</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">자기자본, 작음</div><br>
+                            <div class="answer">부채, 요구불</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>2번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>이윤추구를 통한 (  )의 확보가 금융기관경영에 있어서 매우 중요한 고려사항</span><br><br>
+                        <span>빈칸과 함께 위 설명은 어떤 원칙을 의미하는가?</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">수익성</div><br>
+                            <div class="answer">수익성의 원칙</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>3번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>금융기관 경영의 방침과 결과가 (  )에 부합해야 한다는 것.</span><br><br>
+                        <span>빈칸과 함께 위 설명은 어떤 원칙을 의미하는가?</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">공익</div><br>
+                            <div class="answer">공공성의 원칙</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>4번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>고객의 자금인출에 대비하여 적정수준의 (  )을 보유해야 한다는 것.</span><br><br>
+                        <span>빈칸과 함께 위 설명은 어떤 원칙을 의미하는가?</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">유동성</div><br>
+                            <div class="answer">유동성의 원칙</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>5번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>채무불이행위험, 시장위험이 현재화하여 금융자산이 부실화되면 금융기관 경영의 질이 저하하여 (  )이 저하됨.</span><br><br>
+                        <span>빈칸과 함께 위 설명은 어떤 원칙을 의미하는가?</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">건전성</div><br>
+                            <div class="answer">건전성의 원칙</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>6번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>금융기관은 공공성이 높은 기관이므로 단기적인 유동성의 확보만으로는 불충분하며 보다 근본적인 지급능력 또는 청산능력을 갖추어야 한다는 것</span><br><br>
+                        <span>위 설명은 어떤 원칙을 의미하는가?</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">안전성의 원칙</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>7번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>은행은 (  )이고 (   )적인 상업어음에만 자금을 사용해야 한다는 의미</span><br><br>
+                        <span>빈칸과 함께 위 설명은 어떤 것을 의미하는가?</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">단기적, 자기청산</div><br>
+                            <div class="answer">상업대출이론</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>8번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>은행대출을 (   )적 대출로 제한하는 것은 무의미하다고 주장.</span><br><br>
+                        <span>빈칸과 함께 위 설명은 어떤 것을 의미하는가?</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">자기청산</div><br>
+                            <div class="answer">기대소득이론</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>9번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(   )에서보다 (   ) 종류를 더 넓힘으로써 은행경영에 좀더 일반적인 견해를 취함.</span><br><br>
+                        <span>빈칸과 함께 위 설명은 어떤 것을 의미하는가?</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">상업대출이론, 보유자산</div><br>
+                            <div class="answer">전가이론</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>10번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>증권거래소 상장요건에 (  )하는 유망중소기업, 벤처기업 등에게 자본시장을 통한 (    )를 제공하는 한편 투자자에게는 (   ) (   ) 투자수단을 제공하는 시장. (    )에 비해 완화된 상장요건을 적용.</span><br><br>
+                        <span>빈칸과 함께 위 설명은 어떤 것을 의미하는가?</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">미달, 자금조달기회, 고위험, 고수익, 유가증권시장</div><br>
+                            <div class="answer">코스닥 시장</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>11번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>1. 서킷브레이커 2. 변동성완화장치 3. 가격상승폭제도 4. 사이드카</span><br><br>
+                        <span>투자자보호장치로 알맞지 않은 것은?</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">3. 가격상승폭제도</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>12번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(   )은 금융기관이 할인하여 보유하고 있는 (   ), 무역어음 또는 (    )어음을 분할하거나 통합하여 새롭게 발행한 (   ).</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">표지어음, 상업어음, 팩토링, 약속어음</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>13번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(   )은 통화량의 (  )을 목적으로 한국은행이 금융기관 또는 일반을 대상으로 총통화의 (   ) 이내에서 발행하는 (   ).</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">통화안정증권, 조절, 50%, 단기증권</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>14번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>금융기관의 (  )·(  )를 추진하는 과정에서 금융기관 간 합병의 경우 (   ), (   ) 등으로 인한 부작용을 (   )할 수 있는 이점. (   ) 대비 (   )가 은행 등에 비해 높다는 점도 (  ) 등에 유리.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">대형화, 겸업화, 조직문화, 인사문제, 최소화, 자기자본, 출자한도, 대형화</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>15번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>금융지주회사는 (  ) 지배에 관한 업무만 수행하는 (   )만 허용.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">자회사, 순수지주회사</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>16번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>동일 지주회사 내의 자회사간 (   )를 방지하기 위해 자회사 간 (   ) 등의 거래가 제한.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">위험전이, 신용공여</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>17번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>금융지주회사 소속 금융회사 간에는 고객의 (   )와 (   )를 공유.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">금융거래정보, 신용정보</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>18번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  )와 (  )를 동시에 보유할 수 없다. (   ) 원칙</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">금융자회사, 비금융자회사, 금산분리</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>19번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>지주회사의 자회사는 다른 자회사 또는 지주회사의 (  )을 소유할 수 없도록 되어 있다. (   ), (   ) 방지</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">주식, 순환출자, 상호출자</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>20번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>전력, 조선, 철강 등 중요 산업부문에 (  ) 및 (   )을 공여, 이러한 자금을 공급받은 사업체에 대한 (    ) 대출.</span><br><br>
+                        <span>빈칸과 함께 위 설명은 어떤 것을 의미하는가?</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">시설자금, 기술개발자금, 운영자금</div><br>
+                            <div class="answer">한국산업은행</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>21번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>1961년 8월 (   )에 대해 효율적인 신용제도를 확립함으로써 (   )의 자주적인 경제활동을 원할케 하고, 그 경제적 지위의 향상을 도모하기 위해 설립.</span><br><br>
+                        <span>빈칸과 함께 위 설명은 어떤 것을 의미하는가?</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">중소기업자</div><br>
+                            <div class="answer">중소기업은행</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>22번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>1962년 4월 (  )과 (   )의 협동조합을 촉진하여 그들의 경제적 지위를 향상시키고, (  )의 생산력을 증강시키기 위해 설립.</span><br><br>
+                        <span>빈칸과 함께 위 설명은 어떤 것을 의미하는가?</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">어민, 수산제조업자, 수산업</div><br>
+                            <div class="answer">수산업협동조합</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>23번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>자산관리에 주로 이용되었던 방식은?</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">자산배분법, 자금전환법</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>24번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>금융기관의 자본과 부채를 총 재원으로 해서, 환금성의 크기에 따라 (    ), (    ), (   ), (   ) 순서로 배분하는 방식으로 (  )보다 유동성 확보를 중시하는 방식.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">제1차 유동성준비금(현금 및 지준예치금), 제2차 유동성준비금(CD 등 유동성이 높은 단기증권), 대출, 장기채권, 수익성</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>25번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>자산과 부채 및 자본을 모두 그 (   ) 또는 (   )에 따라 분류, 양자를 유형별로 대응시키는 방식으로 자산배분법에 비해 보다 상세한 자금 관리를 할 수 있는 장점이 있음.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">환금성, 변동성</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>26번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>1960년대 초부터 1차 (  )이 일어난 1973년 이전까지의 금융기관 자금관리방식을 (   )로 분류.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">석유파동, 부채관리</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>27번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>부채의 조달에 의해 (   ) 규모의 크기를 조작할 수 있다는 전제하에 자금의 (  )측면보다는 자금의 (  )측면을 보다 중시하는 적극적인 자금관리 방식.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">자금운용, 운용, 조달</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>28번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>금융기관들이 지준부담이 없는 (   )을 활용으로 인하여 중앙은행에 대한 의존도가 (  ) -> 금융정책효과를 (  )시키는 결과 초래.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">유동성관리자금, 감소, 약화</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>29번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>1973년 이후부터 현재에 이르기까지의 자금관리방식을 (   )로 분류.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">자산 부채종합관리</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>30번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>세계적 불경기와 브레튼우즈 체제의 붕괴 -> (       ) -> (       ) -> (   )의 자금관리방식에 변화를 가져옴.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">국제금융시장의 혼란, 급격한 환율파동, 부채중심</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>31번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(   )은 금융기관의 목표를 달성하기 위한 전략적인 재무계획과 규제시스템을 포괄하는 개념.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">ALM(자산부채종합관리모형)</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>32번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(   )은 금융기관이 여러 가지 요소들을 고려하여 전반적인 목표나 정책, 전략 등을 개발하고 평가하는 일련의 경영성과.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">랜드(Land)</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>33번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(   )은 금융기관을 이자율변동위험과 경기 후퇴로부터 보호하면서 수익성, 성장성, 유동성, 안정성 및 시장지위 확보를 포괄하는 경영의 종합적인 목표를 달성하는 기능.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">바인더(Binder)</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>34번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>GAP = (  ) - (  )  또는 GAP = (  ) / (  ).</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">RSA, RSL</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>35번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>RSA = (   )   RSL = (   ).</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">금리민감형자산, 금리민감형부채</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>36번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>일반적 갭관리는 갭을 (   ) 또는 (   )의 수준에서 유지하고자 함.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">0(RSA-RSL), 1(RSA/RSL)</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>37번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>갭이 0 또는 1인 경우 : (    )으로부터 (   )되었다고 할 수 있음.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">금리변동위험, 헤지(hedge)</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>38번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>갭이 0 또는 1을 중심으로 상하로 차이가 큰 경우 : (    )에 많이 (    ).</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">금리변동위험, 노출(exposure)</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>39번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>금리 상승이 예상될 경우 : (  ) 포지션으로 단기적 이익 취득.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">정의 갭(positive gap)</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>40번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(   ) 상승국면 -> 점진적인 갭의 (  ), (   )이 피크수준 -> (   )의 갭 유지, (   ) 하강국면 -> 점진적인 갭의 (   ), (    )이 바닥수준 -> (    )의 갭 유지가 필요.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">이자율, 확대, 이자율, 최대한, 이자율, 축소, 이자율, 최소한</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>41번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(   )의 변동에 따라 금리 또는 (   )이 변하는 자산과 부채를 (   )별로 분류.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">시장이자율, 수익률, 만기</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>42번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>각 (  )별로 자산과 부채의 잔액이 (   )이 되지 않는 부분은 (   )에서 조달한 (   )을 통하여 (   )을 이루도록 하는 방법.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">만기, 균형(match), 단기금융시장, 유동성관리자금, 균형</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>43번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  )별로 자산과 부채의 잔액을 일치시킴으로써 (   )를 해소.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">만기, 만기불일치(mismatch)</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>44번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(   )를 지급하는 자산과 부채의 (   )을 이용하여 양자를 적절히 연계시킴으로써 (   )의 위험으로부터 면역시키는 기법.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">고정금리, 듀레이션, 금리변동</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>45번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>자산과 부채의 (  )는 물론 자산과 부채로부터 발생하는 현금흐름의 크기뿐만 아니라 발생시점까지도 고려, 각 자산 및 부채항목의 (   )에 대한 (   )를 정확하게 측정.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">만기, 이자율변화, 민감도</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>46번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>자산과 부채 전체를 각각 하나의 포트폴리오로 하여 (   )을 나타내는 (   )이라는 하나의 척도를 이용한다는 점에서 간편함.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">이자율탄력성, 평균기간</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>47번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  ) 지속을 위해 자산과 부채의 만기를 수시로 (  )해야함.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">면역효과, 재조정</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>48번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  )의 모든 항목에 대한 (   )을 산출하기가 어려움.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">대차대조표, 듀레이션</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>49번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(   )은 (   ) 저축기관으로서 (    )에 의거 자금을 조달하고 이를 장기적인 투자에 운용.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">보험기관, 계약형, 장기계약</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>50번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>자금유입이 안정적일 뿐만 아니라 (   )의 형태로 발생하는 자금유출도 확률적으로 예측 가능.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">보험금</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>51번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  )은 피보험자가 일정한 기간 내에 (  )할 경우에만 지정된 수혜자에게 보험금을 지급.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">사망보험, 사망</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>52번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(   )은 일정한 계약기간을 정하고 피보험자가 계약기간의 종료시까지 (   ) 시 계약액 지급.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">생존보험, 생존</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>53번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(   )은 피보험자가 사망 시 계약액과 동일한 보험금을 수익자에게 지급하거나 일정한 연령까지 생존 시 피보험자에게 (  )을 지급.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">양로보험, 생존급부금</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>54번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  )은 일정한 요건을 갖춘 (  )의 구성원을 대상으로 하나의 증서를 발행.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">단체보험, 단체</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>55번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(   )는 화재, 도난, 사고나 부주의로 인하여 발생하는 재산상의 손실에 대하여 보험금을 지급하기로 약속한 증서를 판매, 이로부터 조달된 자금을 본원적 증권에 투자하는 금융기관.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">손해보험회사</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>56번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>손해보험과 생명보험의 차이 - 만기가 대체로 (  ), 사고의 발생확률을 추정하기 (   ) 따라서 현금 유출입을 예측하기 (   ), (   ) 없음.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">짧음, 어렵고, 어려움, 저축성기능</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>57번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>자본시장 : (  )금융시장, 자금시장 : (  )금융시장.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">장기, 단기</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>58번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>단기증권의 만기는 (  )년 미만이고 그 종류도 다양하다.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">1</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>59번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>자금시장은 (  ) 시장이다.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">추상적</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>60번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>자금시장은 (  )시장이며, (  )시장 거래방식을 취한다.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">도매, 공개</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>61번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>자금시장은 (  ) 및 (  )방식이 간편하다.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">거래, 결제</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>62번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(   )는 정기예금증서의 양도를 가능케함으로써 정기예금에 (   )을 부여한 것.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">양도성예금증서(negotiable certificates of deposit : CD), 유동성</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>63번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>발행기관인 은행의 입장에서는 대출 등 (   )에 따라 발행규모를 조절함으로써 (  )적인 (   )이 가능하다는 이점.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">자금수요, 탄력, 자금조달</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>64번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>중개기관은 (  )과 (  )을 연결하면서 수수료를 받을 뿐 아니라 (   )으로 매매에 참여하여 시세차익 가능.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">발행기관, 매수기관, 자기계산</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>65번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>주식유통시장 : 이미 발행된 (   )이 투자자들 상호간에 (   )되는 시장.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">유가증권, 매매거래</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>66번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>증권거래소시장 : (  )시장, (  )시장 및 (  )시장.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">유가증권, 코스닥, 코넥스</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>67번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>장외시장 : (   ) 시장.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">K-OTC</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>68번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>주식유통시장은 발행된 주식의 (  )과 (  )을 높여 일반투자자의 투자를 (  )시킴으로써 발행시장에서의 (   )을 원활하게 함.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">시장성, 유통성, 촉진, 장기자본조달</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>69번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>주식유통시장에 의한 주식의 (  )과 (   )은 주식의 (   )을 높여줌.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">시장성, 유동성, 담보력</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>70번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>주식유통시장은 (  )의 투자자가 참여하는 (   )이므로 주식의 공정한 가격을 형성.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">다수, 자유경쟁시장</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>71번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>주식유통시장에서 형성되는 가격은 앞으로 발행할 새로운 주식의 (    ) 역할.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">가격을 결정하는</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>72번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(   ) 분석법 - (  ) 또는 부채항목별로 그 (  )을 체계적으로 분석하여 금융기관의 (  )과 (  ) 관리를 정밀하게 관리.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">순차액, 개별자산, 수익성, 수익성, 유동성</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>73번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>오늘날의 중앙은행 가운데 오랜 역사를 가지고 있는 은행은 20세기 이전까지 일반적으로 (   )이라고 불리고 있었음.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">발권은행</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>74번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  )은 그것을 배경을 삼아 특별한 의무와 (   )의 (   )을 획득하기까지는 상당히 오랜 세월이 필요하였음.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">발권은행, 은행권발행, 독점권</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>75번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  )은 정부의 은행으로서의 기능, 정부의 대행기관으로서의 기능 수행.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">중앙은행</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>76번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(   )은 정부기관을 위하여 (  )을 받아들이고, 또 정부기관을 대신하여 (  )을 맡아봄.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">중앙은행, 예금, 추심</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>77번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>은행의 은행으로서 여러 은행의 (   )을 보관할 뿐만 아니라, (   )의 중심기관으로서의 기능을 수행.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">지준금, 어음교환</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>78번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>일반적으로 (  )은 원칙적으로 (  )과 직접적인 거래를 하지 않고, 다른 (  )이나 (   )만을 상대로 업무를 수행.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">중앙은행, 일반대중, 은행, 금융기관</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>79번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(   )은 한 나라의 (   )을 조절하는 중대한 책임을 지고 있음.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">중앙은행, 통화량</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>80번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>양적 신용통제 - (  )정책, (  )정책, (  )정책.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">금리, 지급준비율, 공개시장조작</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>81번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>자금시장은 (  ) 사정을 반영하여 (   )를 형성하고, 금융기관의 예대금리 및 자본시장의 (   )와 균형관계를 유지함으로써 자금을 효율적으로 배분.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">자금수급, 단기실세금리, 장기금리</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>82번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>자금시장은 중앙은행의 (   ) 정책에 효율적인 경로를 제공.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">공개시장조작</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>83번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>자금시장은 경제주체(기업, 금융기관, 정부 등)에게 효율적인 (  ) 관리수단을 제공.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">유동성</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>84번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(   )은 신용상태가 양호한 기업이 상거래와 관계없이 (   )을 조달하기 위하여 (   )을 바탕으로 발행하는 만기 (  )년 이내의 융통어음, 상업어음과 구별.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">기업어음, 단기자금, 자기신용, 1</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>85번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(   ) : 신주를 발행할 때 그 인수가액을 현금이나 현물로 납입시켜 신규로 자금 또는 재산이 기업으로 들어오는 경우.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">유상증자</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>86번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  ) : 회사의 총자산에는 변화를 가져오지 않고 재무제표상 항목 간의 변동을 통하여 신주식을 발행하는 형식적 증자.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">무상증자</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>87번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>금융환경 변화 -> 은행의 (   ) 참여 증가 -> (   ) 급증, 다양한 형태의 리스크 등장.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">자본시장, 시장위험</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>88번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>다양한 형태의 리스크를 일관된 방식으로 측정하고 체계적으로 관리할 수 있는 새로운 위험관리 모형으로 (   )이 등장.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">VaR 모형</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>89번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>J.P.Morgan 사의 위험을 하나의 수치로 종합하여 (  ) (  ) 후에 보고하도록 하였는데 이 보고서가 (  )의 효시가 됨.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">매일, 영업종료, VaR</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>90번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>1997년 12월 신 (       )의 제정으로 확산 보급.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">BIS 자기자본규제</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>91번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  ) : 포지션에 대하여 일정기간 동안에 정상적인 시장여건 하에서 일정확률로 발생할 수 있는 (    ).</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">VaR(Value at Risk), 최대손실금액</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>92번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>다양한 형태의 위험을 하나의 (  )으로 나타내므로 위험을 간단 명료하게 알 수 있게 함.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">금액</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>93번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  ) 간의 위험 비교 가능.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">개별자산들</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>94번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>조직 전체의 (  ) 및 타 기업과의 위험 비교 용이.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">리스크 평가</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>95번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(   )로 하여금 조직의 전체적인 측면에서 위험관리에 도움.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">최고경영자</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>96번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>포트폴리오의 구성이 일정한 경우 (   )이 길수록 (  ) 증가.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">보유기간, VaR</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>97번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  )이 길수록 대폭적인 (  )이 일어날 확률이 크고, 따라서 포지션 (   )의 리스크가 증가되기 때문.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">보유기간, 가격변동, 가치감소</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>98번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>개별 금융기관들이 (   )을 이용한 (   )을 구축하는 것이 기술적으로 쉽지 않음.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">VaR, 위험관리시스템</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>99번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>시장위험이 큰 자산, 특히 (  ) 투자자산의 가격변동위험을 중심으로 개발된 모형이므로 현실적으로 예대부문의 금리위험이나 (  )에 그대로 적용하는 데에는 문제가 있음.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">단기성, 신용위험</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>100번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  )은 금리위험을 관리하기 위한 (  )이나 신용위험을 관리하기 위한 파산모형 등과 함께 상호보완적으로 사용될 때 그 유용성이 증가할 것임.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">VaR, ALM</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>101번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  )상품의 경우 거래형태가 다양하고, 가격변동위험의 측정이 매우 어려움.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">파생금융</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>102번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  )은 금융기관 간에 하루 내지 수일 간의 초단기 자금이 유통되는 시장.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">콜시장</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>103번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  ) : 콜시장에서 차입측 콜자금, (  ) : 콜시장에서 대여측 콜자금.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">콜머니, 콜론</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>104번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  ) : 자금의 수요자와 공급자를 연결시켜 주는 시장.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">금융시장</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>105번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  ) : 주로 단기적인 자금의 거래를 담당, (  ) : 장기적인 자금의 거래를 담당.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">자금시장, 자본시장</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>106번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  ) : 유가증권이 매매거래되는 시장을 총칭.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">증권시장</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>107번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  ) : 유가증권을 매개로 하여 발행주체와 증권회사 및 투자자 사이에서 유가증권과 자금의 수급관계가 이루어지는 곳. (  )과 (  )을 포괄한 개념의 시장</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">광의, 발행시장, 유통시장</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>108번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  ) : 다수의 매매 쌍방이 일정한 시간과 일정한 장소에 집결하여 일정한 조직과 거래질서 하에서 증권을 매매거래하는 조직적이고 구체적인 시장으로서 증권거래소시장.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">협의</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>109번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  )이 유일한 발권은행, 은행권 뿐만 아니라 (  )의 발행도 독점.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">한국은행, 주화</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>110번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>정부에 대하여 (  ) 또는 기타의 형식으로 신용을 수여할 수 있으며 또 정부로부터 (  )를 직접 인수, 국고금의 수입 및 지출은 한국은행에 있는 (  )의 수급에 의해서 정리.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">당좌대월, 국채, 정부예금</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>111번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  ) 주요 업무 : 대중으로부터 단기적인 예금을 받아들이고, 이를 기초로 하여 대부나 어음할인에 의해서 주로 단기적인 상업자금을 공급.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">일반은행</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>112번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>영국 - (  )은행, 미국 - (  )은행, 독일 - (  )은행, 일본 - (  )은행.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">예금, 상업, 신용, 보통</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>113번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  )은행 - 서민의 금융편의를 도모한다는 설립취지에 맞추어 총 여신의 (  ) 이상을 개인 및 소규모 기업을 대상으로 운용.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">상호저축, 70%</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>114번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  ) - 지역 직장 단체 등 상호 유대를 가진 개인이나 단체 간의 협동조직을 기반으로 자금의 조성과 이용을 도모하는 비영리금융기관.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">신용협동조합</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>115번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  ) - 회원으로부터의 예탁금 적금의 수입, 회원에 대한 대출, 내국환, 국가 공공단체 및 금융기관의 업무 대리, 보호예수 등의 업무, 어음할인 등 일부를 제외하고는 신용협동조합과 거의 동일.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">새마을금고</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>116번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  ) - 자본시장법 시행에 따라 집합투자를 수행하는 자로서, 종래의 증권투자신탁업법에 의한 투자신탁회사와 증권투자회사법에 의한 자산운용회사를 통합 개편함으로써 새롭게 도입된 자산운용회사.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">집합투자업자</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>117번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>여신전문금융회사 - (  ) 없이 여신업무만을 취급하는 금융기관.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">수신기능</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>118번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>여신전문금융회사 종류 - (  )회사, (  )회사, (  )회사, (  )회사.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">리스, 신용카드, 할부금융, 신기술사업금융</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>119번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  ) : 기업이 새로이 (  )를 발행하여 이를 기존주주에게 배정하는 것이 아니라, (  ) 모두를 일반 투자대중에게 청약을 권유하여 인수하게 함으로써 대주주를 비롯한 기존주주들의 지분율을 감소시키는 한편, (  )를 널리 분산.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">신주공모, 신주, 신주, 신주</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>120번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  ) - 주식회사가 발행한 주식을 일반투자자에게 균일한 조건으로 공모하거나, 이미 발행되어 대주주가 소유하고 있는 주식의 일부를 매출하여 다수의 주주에게 주식을 분산시키는 것.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">기업공개(IPO)</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>121번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  ) - 기업의 신규자금수요가 없거나 현재 자본금이 과다할 경우 기존주주들이 보유하고 있는 이미 발행된 주식을 일반투자자에게 널리 매출하여 주식을 분산.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">구주매출</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>122번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  ) - 기존주주 소유의 기발행주식을 매출하면서 신주를 발행하여 널리 공모함으로써 필요한 자금을 조달하는 한편, 기존주주의 지분율을 떨어뜨리고 주식을 일반 투자대중에게 광범위하게 분산.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">병행</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>123번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  ) - 발행인이 특정의 수요자에 대하여서만 주식을 발행, 발기인 또는 기존의 주주만을 대상으로 하여 주식을 발행하거나 연고자에게 인수.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">사모발행(private placement)</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>124번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  ) : 발행회사가 전문적인 지식, 조직 및 경험을 축적하고 있는 금융투자회사를 통해 주식을 발행하는 방식.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">간접발행</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>125번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  ) : 일반투자자의 응모총액이 모집총액에 (  )할 경우 금융투자회사가 미소화분의 인수의무를 부담.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">잔액인수, 미달</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>126번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  ) : 발행금액 (  )을 금융투자회사가 인수.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">총액인수, 전액</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>127번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  ) : 발행회사가 발행위험을 부담하고 발행사무만 금융투자회사에 위탁.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">모집주선</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>128번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>기타금융기관 종류 - (  )회사, (  )회사, (  )회사, (  ), (  ).</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">벤처캐피탈, 증권금융, 금융지주, 대부업자, 신용보증기관</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>129번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  ) - 주식 또는 지분의 소유를 통하여 금융업을 영위하는 회사 또는 금융업의 영위와 밀접한 관련이 있는 회사를 지배하는 것을 주된 사업으로 하는 회사.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">금융지주회사</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>130번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  ) - 일반투자가나 증권회사에게 증권의 신용거래에 필요한 자금을 대출하거나 유가증권을 대여함으로써 증권거래를 촉진하는 것을 목적으로 하는 회사.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">증권금융회사</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>131번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  ) - 최초의 매도자가 일정한 기간 후에 일정한 가격으로 동일채권을 다시 매수(매도)할 것을 조건으로 채권을 매도(매수)하는 것.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">환매조건부채권</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>132번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  )자금의 수급을 조절하는 기능을 수행하는 동시에 채권의 (  )을 높여 채권의 (  )를 (  )시키는 기능.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">단기, 유동성, 소화, 촉진</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>133번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  )거래는 만기가 짧기 때문에 (  )에 속하지만 거래대상이 (  )인 채권이라는 점에서 기업어음, 양도성예금증서 등 다른 단기금융자산과는 성격이 다름.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">RP, 화폐자산, 장기금융자산</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>134번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>(  )를 이용할 경우 자금의 수요자는 (  )에 따른 자본손실 없이 단기간 필요한 자금을 보다 쉽게 조달할 수 있으며, 반면에 일시적으로 여유자금을 보유하고 있는 투자자도 (  ) 없이 자금을 운용할 수 있는 이점.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">환매조건부채권거래, 채권매각, 자본손실위험</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>135번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>자금의 원활한 수급조절은 물론 금융자산 간의 (  )를 촉진함으로써 자금시장의 발전에 크게 기여하였을 뿐만 아니라 채권의 유동성을 제고시킴으로써 채권의 발행을 용이하게 자본시장 발전에 기여.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">금리차익거래</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>136번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>( )는 「주식∙사채 등의 전자등록에 관한 법률」상의 요건을 갖춘 사채권으로서 전자적으로 발행∙유통되는 단기금융상품, 글로벌 금융위기 이후 금융규제 개혁을 통한 선진금융산업 육성 과제의 하나로 추진되어 2013년 1월 15일 도입.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">단기사채</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>137번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>인수 또는 인도시 위∙변조, 분실 등 ( )에 수반되는 위험을 원천적으로 방지할 수 있으며 ( )도 절약.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">실물 발행, 발행 비용</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>138번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>누구나 확인할 수 있는 전자등록기관의 (  )에 등록하는 방식으로 발행∙유통됨에 따라 거래의 (  )도 크게 제고.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">전자장부, 투명성</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>139번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>발행과 유통 및 상환이 모두 전자적으로 이루어지면서 증권과 대금의 (  )가 가능.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">실시간 동시결제</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>140번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>증권사 등 비은행금융기관들의 (  ) 조달수요가 주로 (  )에 집중되어 있던 현상을 완화할 필요.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">단기자금, 콜시장</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>141번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>단기사채 도입배경 - (  )을 대체.</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">기업어음</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>142번 문제</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>주식발행시장의 구조 - 
+                            주식의 발행은 주식회사가 (  )을 조달하거나 자본금을 증액할 때 이루어진다. 
+                            발행시장(issuing market)은 새로운 주식이 최초로 출시되는 시장이라는 점에서 (  ).</span><br><br>
+                        <span>빈칸 채우기</span>
+                    </div>
+                    <div class="quiz__view">
+                        <div class="card-container">
+                            <div class="answer">설립자본금, 제1차 시장</div>
+                        </div>
+                    </div>
+                    <div class="quiz__answer">
+                        <button class="confirm" onclick="ClickConfirm(this)">정답 확인하기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz__wrap">
+            <div class="quiz">
+                <div class="quiz__header">
+                    <h2 class="quiz__title">
+                        <span>주식발행시장의 구조</span>
+                    </h2>
+                </div>
+
+                <div class="quiz__main">
+                    <div class="quiz__question">
+                        <span>
+                            <img src="data:image/jpeg;base64, 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" >
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</body>
+</html>
